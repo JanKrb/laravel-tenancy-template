@@ -7,6 +7,9 @@ use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvi
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
+use Stancl\Tenancy\Middleware\CheckTenantForMaintenanceMode;
+use Stancl\Tenancy\Middleware\InitializeTenancyByDomain;
+use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;
 
 class RouteServiceProvider extends ServiceProvider
 {
@@ -30,6 +33,26 @@ class RouteServiceProvider extends ServiceProvider
 
         $this->mapRouteWeb();
         $this->mapRouteApi();
+
+        $this->routes(function () {
+            Route::middleware([
+                'web',
+                InitializeTenancyByDomain::class,
+                PreventAccessFromCentralDomains::class,
+                CheckTenantForMaintenanceMode::class
+            ])
+                ->as('tenant.web')
+                ->group(base_path('routes/tenants/web.php'));
+
+            Route::middleware([
+                'api',
+                InitializeTenancyByDomain::class,
+                PreventAccessFromCentralDomains::class,
+                CheckTenantForMaintenanceMode::class
+            ])
+                ->as('tenant.api')
+                ->group(base_path('routes/tenants/api.php'));
+        });
     }
 
     private function centralDomains(): array
