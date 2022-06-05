@@ -1,0 +1,14 @@
+=> [34;4mStancl\Tenancy\Database\Models\Domain[39;24m {#3633
+     [34mdomain[39m: "[32mbar.localhost[39m",
+     [34mtenant_id[39m: "[32m31200fab-446b-4fd2-95ab-800b6fd69272[39m",
+     [34mupdated_at[39m: "[32m2022-06-05 11:12:40[39m",
+     [34mcreated_at[39m: "[32m2022-06-05 11:12:40[39m",
+     [34mid[39m: [35m6[39m,
+     [34mtenant[39m: [34;4mApp\Models\Tenant[39;24m {#4618
+       [34mid[39m: "[32m31200fab-446b-4fd2-95ab-800b6fd69272[39m",
+       [34mdata[39m: [36mnull[39m,
+       [34mupdated_at[39m: "[32m2022-06-05 11:12:31[39m",
+       [34mtenancy_db_name[39m: "[32mtenant31200fab-446b-4fd2-95ab-800b6fd69272[39m",
+     },
+   }
+
