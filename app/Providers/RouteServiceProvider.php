@@ -43,7 +43,7 @@ class RouteServiceProvider extends ServiceProvider
             Route::middleware('web')
                 ->domain($domain)
                 ->namespace($this->namespace)
-                ->group(base_path('routes/web.php'));
+                ->group(base_path('routes/core/web.php'));
         }
     }
 
@@ -54,7 +54,7 @@ class RouteServiceProvider extends ServiceProvider
                 ->domain($domain)
                 ->middleware('api')
                 ->namespace($this->namespace)
-                ->group(base_path('routes/api.php'));
+                ->group(base_path('routes/core/api.php'));
         }
     }
 
