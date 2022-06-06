@@ -2,7 +2,12 @@
 
 namespace App\Exceptions;
 
+use App\Http\Services\ResponseService;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Validation\ValidationException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -35,6 +40,48 @@ class Handler extends ExceptionHandler
         'password',
         'password_confirmation',
     ];
+
+    /**
+     * @param Throwable $e
+     * @return void
+     * @throws Throwable
+     */
+    public function report(Throwable $e)
+    {
+        parent::report($e);
+    }
+
+    /**
+     * Render an exception into an HTTP response.
+     *
+     * @param Request $request
+     * @param Throwable $e
+     * @return Response|JsonResponse
+     * @throws Throwable
+     */
+    public function render($request, Throwable $e): Response|JsonResponse
+    {
+        if ($request->expectsJson()) {
+            if (!empty($e)) {
+                $payload = [];
+                $status = method_exists($e, 'getStatusCode') ? $e->getStatusCode() : 400;
+
+                if (config('app.debug')) {
+                    $payload['exception'] = get_class($e);
+                    $payload['message'] = $e->getMessage();
+                    $payload['trace'] = $e->getTrace();
+                }
+
+                return ResponseService::sendResponse(
+                    payload: $payload,
+                    feedbackMessage: __('Something went wrong.'),
+                    httpCode: $status
+                );
+            }
+        }
+
+        return parent::render($request, $e);
+    }
 
     /**
      * Register the exception handling callbacks for the application.
