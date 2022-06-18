@@ -45,7 +45,11 @@ return [
         'tenant' => [
             'driver' => 'session',
             'provider' => 'users'
-        ]
+        ],
+        'web' => [
+            'driver' => 'session',
+            'provider' => 'central',
+        ],
     ],
 
     /*
