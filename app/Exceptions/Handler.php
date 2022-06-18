@@ -31,6 +31,15 @@ class Handler extends ExceptionHandler
     ];
 
     /**
+     * A list of the exception types that will be skipped.
+     *
+     * @var array
+     */
+    protected array $skipCustomException = [
+        'Illuminate\\Validation\\ValidationException'
+    ];
+
+    /**
      * A list of the inputs that are never flashed to the session on validation exceptions.
      *
      * @var array<int, string>
@@ -63,6 +72,10 @@ class Handler extends ExceptionHandler
     {
         if ($request->expectsJson()) {
             if (!empty($e)) {
+                if (in_array(get_class($e), $this->skipCustomException)) {
+                    return parent::render($request, $e);
+                }
+
                 $payload = [];
                 $status = method_exists($e, 'getStatusCode') ? $e->getStatusCode() : 400;
 
