@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\CentralUser;
+
 return [
 
     /*
@@ -14,7 +16,7 @@ return [
     */
 
     'defaults' => [
-        'guard' => 'web',
+        'guard' => 'central',
         'passwords' => 'users',
     ],
 
@@ -36,10 +38,14 @@ return [
     */
 
     'guards' => [
-        'web' => [
+        'central' => [
             'driver' => 'session',
-            'provider' => 'users',
+            'provider' => 'central',
         ],
+        'tenant' => [
+            'driver' => 'session',
+            'provider' => 'users'
+        ]
     ],
 
     /*
@@ -60,15 +66,15 @@ return [
     */
 
     'providers' => [
+        'central' => [
+            'driver' => 'eloquent',
+            'model' => CentralUser::class
+        ],
+
         'users' => [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
         ],
-
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
     ],
 
     /*
