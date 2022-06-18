@@ -53,13 +53,16 @@ class CentralUser extends Authenticatable
         $token = $tokenResult->accessToken;
 
         if ($rememberMe) {
-            $token->expires_at = now()->addWeeks(1);
+            $token->expired_at = now()->addMonth();
+        } else {
+            $token->expired_at = now()->addWeek();
         }
 
         $token->save();
 
         return [
             'access_token' => $tokenResult->plainTextToken,
+            'expired_at' => $token->expired_at,
             'token_type' => 'Bearer',
         ];
     }
